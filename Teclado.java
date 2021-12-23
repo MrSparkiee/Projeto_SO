@@ -2,18 +2,18 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 public class Teclado implements ActionListener, Runnable {
     JFrame janela;
     JLabel labelEstado;
     JLabel labelTeste;
 
-    Semaphore semMT;
+    Semaphore sem;
     Buffer buffer;
 
-    public Teclado(Semaphore semMT, Buffer buffer) {
-        this.semMT = semMT;
+    public Teclado(Semaphore sem, Buffer buffer) {
+        this.sem = sem;
         this.buffer = buffer;
     }
 
@@ -65,34 +65,37 @@ public class Teclado implements ActionListener, Runnable {
         switch (e.getActionCommand()) {
             case "Iniciar":
                 buffer.setBotao(e.getActionCommand());
+                sem.release();
                 break;
             case "Cancelar":
                 buffer.setBotao(e.getActionCommand());
+                sem.release();
                 break;
             case "Emergencia":
                 buffer.setBotao(e.getActionCommand());
+                sem.release();
                 break;
         }
     }
 
-    public void buttonI_OnClick() {
+    // public void buttonI_OnClick() {
 
-        // try {
-        //     labelEstado.setText("Ocupado");
-        //     labelTeste.setText("Tapete");
-        //     Thread.sleep(5 * 1000);
-        //     labelTeste.setText("Lavagem");
-        //     Thread.sleep(ThreadLocalRandom.current().nextInt(4, 9) * 1000);
-        //     labelTeste.setText("Aspersor");
-        //     Thread.sleep(5 * 1000);
-        //     labelTeste.setText("Secagem");
-        //     Thread.sleep(ThreadLocalRandom.current().nextInt(3, 7) * 1000);
-        //     labelTeste.setText("Fim");
-        //     labelEstado.setText("Livre");
-        // } catch (InterruptedException e) {
-        //     e.printStackTrace();
-        // }
-    }
+    //     try {
+    //         labelEstado.setText("Ocupado");
+    //         labelTeste.setText("Tapete");
+    //         Thread.sleep(5 * 1000);
+    //         labelTeste.setText("Lavagem");
+    //         Thread.sleep(ThreadLocalRandom.current().nextInt(4, 9) * 1000);
+    //         labelTeste.setText("Aspersor");
+    //         Thread.sleep(5 * 1000);
+    //         labelTeste.setText("Secagem");
+    //         Thread.sleep(ThreadLocalRandom.current().nextInt(3, 7) * 1000);
+    //         labelTeste.setText("Fim");
+    //         labelEstado.setText("Livre");
+    //     } catch (InterruptedException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 
     @Override
     public void run() {

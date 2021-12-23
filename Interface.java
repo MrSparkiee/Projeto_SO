@@ -3,17 +3,23 @@ import java.awt.event.*;
 import java.util.concurrent.Semaphore;
 import javax.swing.*;
 
-public class Moedeiro implements ActionListener, Runnable {
+public class Interface implements ActionListener, Runnable{
+    public static final double PRECO_LAVAGEM = 4.20;
     double saldo;
+
     JFrame moedeiro;
     JFrame mensagem;
     JLabel labelSaldo;
     JTextField textFieldQuantia;
+
+    JFrame janela;
+    JLabel labelEstado;
+    JLabel labelTeste;
+
     Semaphore sem;
     Buffer buffer;
-    public static final double PRECO_LAVAGEM = 4.20;
 
-    public Moedeiro(Semaphore sem, Buffer buffer) {
+    public Interface(Semaphore sem, Buffer buffer) {
         this.saldo = 0;
         this.sem = sem;
         this.buffer = buffer;
@@ -71,6 +77,49 @@ public class Moedeiro implements ActionListener, Runnable {
         return false;
     }
 
+    public void mostraJanela() {
+        janela = new JFrame("Teclado");
+
+        janela.setLayout(null);
+        janela.setPreferredSize(new Dimension(800, 600));
+
+        JButton botaoI = new JButton("Iniciar");
+        JButton botaoC = new JButton("Cancelar");
+        JButton botaoE = new JButton("Emergencia");
+
+        labelEstado = new JLabel();
+        labelTeste = new JLabel();
+
+        botaoI.setBounds(300, 50, 150, 50);
+        botaoC.setBounds(300, 100, 150, 50);
+        botaoE.setBounds(300, 150, 150, 50);
+
+        labelEstado.setText("Livre");
+        labelTeste.setText("Teste");
+        labelTeste.setName("Teste");
+
+        labelEstado.setBounds(300, 0, 150, 50);
+        labelEstado.setHorizontalAlignment(SwingConstants.CENTER);
+        labelEstado.setVerticalAlignment(SwingConstants.CENTER);
+
+        labelTeste.setBounds(350, 200, 100, 50);
+
+        botaoI.addActionListener(this);
+        botaoC.addActionListener(this);
+        botaoE.addActionListener(this);
+
+        janela.add(botaoI);
+        janela.add(botaoC);
+        janela.add(botaoE);
+        janela.add(labelEstado);
+        janela.add(labelTeste);
+
+        janela.pack();
+        janela.setLocationRelativeTo(null);
+        janela.setVisible(true);
+        janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
     public void mostraMoedeiro() {
         moedeiro = new JFrame("Moedeiro");
 
@@ -126,6 +175,6 @@ public class Moedeiro implements ActionListener, Runnable {
     @Override
     public void run() {
         mostraMoedeiro();
+        mostraJanela();
     }
-
 }
