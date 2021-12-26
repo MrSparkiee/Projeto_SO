@@ -22,6 +22,7 @@ public class Tapete implements  Runnable{
 
     public void setEstado(Enums.EstadoTapete estado) {
         this.estado = estado;
+        labelEstado.setText(estado.toString());
     }
 
     public void mostraTapete(){
