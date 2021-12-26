@@ -3,24 +3,23 @@ import java.awt.event.*;
 import java.util.concurrent.Semaphore;
 import javax.swing.*;
 
-public class Interface implements ActionListener, Runnable{
-    public static final double PRECO_LAVAGEM = 4.20;
-    double saldo;
+public class Interface implements ActionListener, Runnable {
+    private static final double PRECO_LAVAGEM = 4.20;
+    private double saldo;
 
-    JFrame moedeiro;
-    JFrame mensagem;
-    JLabel labelSaldo;
-    JTextField textFieldQuantia;
+    private JFrame moedeiro;
+    private JLabel labelSaldo;
+    private JTextField textFieldQuantia;
 
-    JFrame janela;
-    JLabel labelEstado;
-    JLabel labelTeste;
+    private JFrame janela;
+    private JLabel labelEstado;
+    private JLabel labelTeste; // ELIMINAR
 
-    Semaphore sem;
-    Buffer buffer;
+    private Semaphore sem;
+    private Buffer buffer;
 
     public Interface(Semaphore sem, Buffer buffer) {
-        this.saldo = 0;
+        this.saldo = 999999;  // Valor para debug - Mudar para 0 
         this.sem = sem;
         this.buffer = buffer;
     }
@@ -31,6 +30,22 @@ public class Interface implements ActionListener, Runnable{
 
     public void setSaldo(double saldo) {
         this.saldo = saldo;
+    }
+
+    public synchronized void acorda(){
+        this.notify();
+    }
+
+    public synchronized void espera(){
+        try{
+            this.wait();
+        }catch(InterruptedException e){
+            System.out.println(e);
+        }
+    }
+
+    public synchronized void acordaTodos(){
+        this.notifyAll();   
     }
 
     public void adicionarMoeda(String moeda) {
@@ -72,6 +87,7 @@ public class Interface implements ActionListener, Runnable{
     public boolean verificaSaldo() {
         if (this.saldo >= PRECO_LAVAGEM) {
             this.saldo -= 4.20;
+            labelSaldo.setText(String.format("%.2f", this.saldo) + "€");
             return true;
         }
         return false;
@@ -161,6 +177,26 @@ public class Interface implements ActionListener, Runnable{
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
+            case "Iniciar":
+                if (this.verificaSaldo()) {
+                    try {
+                        sem.wait();
+                    } catch (InterruptedException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    buffer.setBotao(e.getActionCommand());
+                    sem.release();
+                }
+                break;
+            case "Cancelar":
+                buffer.setBotao(e.getActionCommand());
+                sem.release();
+                break;
+            case "Emergencia":
+                buffer.setBotao(e.getActionCommand());
+                sem.release();
+                break;
             case "Adicionar":
                 adicionarMoeda(textFieldQuantia.getText());
                 break;
