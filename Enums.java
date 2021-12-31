@@ -10,7 +10,7 @@ public class Enums {
         PARADO
     }
 
-    public enum EstadoAE{
+    public enum EstadoAS{
         ASPIRACAO,
         LAVAGEM,
         PARADO

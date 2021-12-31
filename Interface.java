@@ -15,12 +15,12 @@ public class Interface implements ActionListener, Runnable {
     private JLabel labelEstado;
     private JLabel labelTeste; // ELIMINAR
 
-    private Semaphore sem;
+    private Semaphore semInterface;
     private Buffer buffer;
 
-    public Interface(Semaphore sem, Buffer buffer) {
-        this.saldo = 999999;  // Valor para debug - Mudar para 0 
-        this.sem = sem;
+    public Interface(Semaphore semInterface, Buffer buffer) {
+        this.saldo = 999;  // Valor para debug - Mudar para 0 
+        this.semInterface = semInterface;
         this.buffer = buffer;
     }
 
@@ -179,23 +179,18 @@ public class Interface implements ActionListener, Runnable {
         switch (e.getActionCommand()) {
             case "Iniciar":
                 if (this.verificaSaldo()) {
-                    try {
-                        sem.wait();
-                    } catch (InterruptedException e1) {
-                        // TODO Auto-generated catch block
-                        e1.printStackTrace();
-                    }
                     buffer.setBotao(e.getActionCommand());
-                    sem.release();
+                    labelEstado.setText("Ocupado");
+                    semInterface.release();
                 }
                 break;
             case "Cancelar":
                 buffer.setBotao(e.getActionCommand());
-                sem.release();
+                semInterface.release();
                 break;
             case "Emergencia":
                 buffer.setBotao(e.getActionCommand());
-                sem.release();
+                semInterface.release();
                 break;
             case "Adicionar":
                 adicionarMoeda(textFieldQuantia.getText());

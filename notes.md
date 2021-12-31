@@ -9,4 +9,3 @@ Aspersor
 Secagem 
 | 3-6 seg - ThreadLocalRandom.current().nextInt(3, 7)
 
-
